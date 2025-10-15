@@ -45,4 +45,17 @@ def avg_yield_maize_north_temp_range(data):
         return 0
     total_yield = sum(float(row['Yield_tons_per_hectare']) for row in filtered)
     return total_yield / len(filtered)
+def percentage_maize_east_high_rainfall(data):
+    """
+    Kamila: % of crops in East region that are Maize with rainfall > 700mm.
+    Uses: Crop, Region, Rainfall_mm
+    """
+    filtered = [
+        row for row in data
+        if row['Region'] == 'East' and row['Rainfall_mm'] and float(row['Rainfall_mm']) > 700
+    ]
+    if not filtered:
+        return 0
+    maize_count = sum(1 for row in filtered if row['Crop'] == 'Maize')
+    return (maize_count / len(filtered)) * 100
 
