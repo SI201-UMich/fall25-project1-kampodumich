@@ -90,4 +90,38 @@ def percentage_wheat_high_yield_south(data):
         return 0
     high_yield_count = sum(1 for row in filtered if float(row['Yield_tons_per_hectare']) > 3)
     return (high_yield_count / len(filtered)) * 100
+# Luther's calculations
+def avg_rainfall_east_high_yield(data):
+    """
+    Luther: Average rainfall in East region where yield > 3.5 tons/hectare.
+    Uses: Region, Yield_tons_per_hectare, Rainfall_mm
+    """
+    filtered = [
+        row for row in data
+        if row['Region'] == 'East'
+        and row['Yield_tons_per_hectare'] and float(row['Yield_tons_per_hectare']) > 3.5
+        and row['Rainfall_mm']
+    ]
+    if not filtered:
+        return 0
+    total_rainfall = sum(float(row['Rainfall_mm']) for row in filtered)
+    return total_rainfall / len(filtered)
 
+def most_frequent_crop_high_yield_rain(data):
+    """
+    Luther: Most frequent crop overall where rainfall > 800mm and yield > 3.5 tons/hectare.
+    Uses: Crop, Rainfall_mm, Yield_tons_per_hectare
+    """
+    crops = [
+        row['Crop'] for row in data
+        if row['Rainfall_mm'] and float(row['Rainfall_mm']) > 800
+        and row['Yield_tons_per_hectare'] and float(row['Yield_tons_per_hectare']) > 3.5
+    ]
+    if not crops:
+        return None
+    freq = {}
+    for crop in crops:
+        freq[crop] = freq.get(crop, 0) + 1
+
+    most_common_crop = max(freq, key=freq.get)
+    return most_common_crop
