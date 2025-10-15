@@ -58,4 +58,36 @@ def percentage_maize_east_high_rainfall(data):
         return 0
     maize_count = sum(1 for row in filtered if row['Crop'] == 'Maize')
     return (maize_count / len(filtered)) * 100
+# Ava's calculations
+def avg_yield_temp_range_west(data):
+    """
+    Ava: Average yield in West region where temperature is between 15–25°C.
+    Uses: Region, Temperature_Celsius, Yield_tons_per_hectare
+    """
+    filtered = [
+        row for row in data
+        if row['Region'] == 'West'
+        and row['Temperature_Celsius'] and 15 <= float(row['Temperature_Celsius']) <= 25
+        and row['Yield_tons_per_hectare']
+    ]
+    if not filtered:
+        return 0
+    total_yield = sum(float(row['Yield_tons_per_hectare']) for row in filtered)
+    return total_yield / len(filtered)
+
+def percentage_wheat_high_yield_south(data):
+    """
+    Ava: % of Wheat crops in South region with yield > 3.0 tons/hectare.
+    Uses: Crop, Region, Yield_tons_per_hectare
+    """
+    filtered = [
+        row for row in data
+        if row['Region'] == 'South'
+        and row['Crop'] == 'Wheat'
+        and row['Yield_tons_per_hectare']
+    ]
+    if not filtered:
+        return 0
+    high_yield_count = sum(1 for row in filtered if float(row['Yield_tons_per_hectare']) > 3)
+    return (high_yield_count / len(filtered)) * 100
 
